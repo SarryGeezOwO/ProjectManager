@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,19 +25,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -49,6 +38,10 @@ public class CreateProject extends FrameBP {
     int pageSelected;
     JTextField nameField;
     JTextField pathField;
+
+    String[] projectTypes = {"java", "html", "csharp"};
+    int selectedType = 0;
+    boolean readMeBool = false;
 
     public CreateProject() {
         super("New project", "< DevStack > New project", new Vector2(800, 600), FrameState.HIDE, false);
@@ -168,7 +161,6 @@ public class CreateProject extends FrameBP {
         p.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
         p.setOpaque(false);
 
-
         Font f = Controller.regular.deriveFont(16f);
         JLabel nameLabel = new JLabel("Name :      ");
         nameLabel.setForeground(new Color(200, 200, 220));
@@ -178,7 +170,7 @@ public class CreateProject extends FrameBP {
         pathLabel.setFont(f);
 
         nameField = createField(300);
-        pathField = createField(400);
+        pathField = createField(405);
         pathField.setEditable(false);
 
         JButton browse = new JButton();
@@ -223,6 +215,17 @@ public class CreateProject extends FrameBP {
         notice.setCaretColor(new Color(0, 0, 0, 1));
         notice.setOpaque(false);
 
+        JLabel typeLabel = new JLabel("Language :  ");
+        typeLabel.setForeground(new Color(200, 200, 220));
+        typeLabel.setFont(f);
+        JPanel typeChooser = createChoosePanel("JAVA", "HTML", "CS");
+
+        JCheckBox readMe = createCheckBox();
+        readMe.addActionListener(e -> readMeBool = readMe.isSelected());
+        JLabel readMeLabel = new JLabel("Add a README");
+        readMeLabel.setFont(Controller.semiBold.deriveFont(14f));
+        readMeLabel.setForeground(new Color(200, 200, 220));
+
         p.add(Box.createRigidArea(new Dimension(650, 20)));
         p.add(nameLabel);
         p.add(nameField);
@@ -230,6 +233,11 @@ public class CreateProject extends FrameBP {
         p.add(pathLabel);
         p.add(pathField);
         p.add(browse);
+        p.add(typeLabel);
+        p.add(typeChooser);
+        p.add(Box.createHorizontalStrut(120));
+        p.add(readMe);
+        p.add(readMeLabel);
         p.add(notice);
         return p;
     }
@@ -248,7 +256,7 @@ public class CreateProject extends FrameBP {
         pathLabel.setFont(f);
 
         nameField = createField(300);
-        pathField = createField(400);
+        pathField = createField(405);
         pathField.setEditable(false);
 
         JButton browse = new JButton();
@@ -279,11 +287,8 @@ public class CreateProject extends FrameBP {
             d.setVisible(true);
         });
 
-        JCheckBox readMe = new JCheckBox();
-        readMe.setMargin(new Insets(0, -5, 0, 0));
-        readMe.setOpaque(false);
-        readMe.setIcon(FrameBP.scaledIcon(new ImageIcon("icons/unchecked.png"), 30, 30));
-        readMe.setSelectedIcon(FrameBP.scaledIcon(new ImageIcon("icons/checked.png"), 30, 30));
+        JCheckBox readMe = createCheckBox();
+        readMe.addActionListener(e -> readMeBool = readMe.isSelected());
         JLabel readMeLabel = new JLabel("Add a README");
         readMeLabel.setFont(Controller.semiBold.deriveFont(14f));
         readMeLabel.setForeground(new Color(200, 200, 220));
@@ -312,6 +317,15 @@ public class CreateProject extends FrameBP {
         return p;
     }
 
+    private JCheckBox createCheckBox() {
+        JCheckBox readMe = new JCheckBox();
+        readMe.setMargin(new Insets(0, -5, 0, 0));
+        readMe.setOpaque(false);
+        readMe.setIcon(FrameBP.scaledIcon(new ImageIcon("icons/unchecked.png"), 30, 30));
+        readMe.setSelectedIcon(FrameBP.scaledIcon(new ImageIcon("icons/checked.png"), 30, 30));
+        return readMe;
+    }
+
     private JPanel getSelectedPage() {
         return switch(pageSelected) {
             case 0 -> createEmptyPage();
@@ -321,23 +335,40 @@ public class CreateProject extends FrameBP {
     }
 
     private void createFolder(String path, int type) {
+        File folder = new File(path);
         if(type == 0) {
             // Empty
-            File folder = new File(path);
-            Path source = Paths.get("materials/empty/Main.java");
-            Path targetDirectory = Paths.get(folder.getAbsolutePath());
-            try {
-                if(folder.mkdir()) {
-                    Path target = targetDirectory.resolve(source.getFileName());
-                    Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-                    ProjectPage.openProject_VScode(folder.getAbsolutePath());
+            File rootSource = new File("materials/empty/" + projectTypes[selectedType]);
+            for(File f : rootSource.listFiles()) {
+                Path source = Paths.get(f.getAbsolutePath());
+                Path targetDirectory = Paths.get(folder.getAbsolutePath());
+                folder.mkdir();
+                if(folder.exists()) {
+                    try {
+                        Path target = targetDirectory.resolve(source.getFileName());
+                        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+                        ProjectPage.openProject_VScode(folder.getAbsolutePath());
+                    } catch (IOException e) {
+                        System.out.println("Failed to create folder");
+                    }
                 }
-            } catch (IOException e) {
-                System.out.println("Failed to create folder");
             }
         }else {
             // Swing
             System.out.println("Swing src.Project Created");
+        }
+
+        if(readMeBool) {
+            File readMeSource = new File("materials/README.txt");
+            Path src = Paths.get(readMeSource.getAbsolutePath());
+            Path targetDirectory = Paths.get(folder.getAbsolutePath());
+            try {
+                Path target = targetDirectory.resolve(src.getFileName());
+                Files.copy(src, target, StandardCopyOption.REPLACE_EXISTING);
+                ProjectPage.openProject_VScode(folder.getAbsolutePath());
+            } catch (IOException e) {
+                System.out.println("Failed to create folder");
+            }
         }
     }
 
@@ -391,6 +422,53 @@ public class CreateProject extends FrameBP {
 
         Font f = Controller.regular.deriveFont(14f);
         b.setFont(f);
+        return b;
+    }
+
+    private JPanel createChoosePanel(String... str) {
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new FlowLayout(FlowLayout.TRAILING, 0,0));
+
+        ButtonGroup group = new ButtonGroup();
+        int counter = 0;
+        for(String s : str) {
+            JRadioButton b = createTypeChooserButton(s, counter);
+            if(counter == 0) b.setSelected(true);
+            p.add(b);
+            group.add(b);
+            counter++;
+        }
+        return p;
+    }
+
+    private JRadioButton createTypeChooserButton(String txt, int page) {
+        JRadioButton b = new JRadioButton(txt);
+        Font f = Controller.regular.deriveFont(14f);
+        Icon transparentIcon = new ImageIcon(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+        b.setIcon(transparentIcon);
+        b.setFont(f);
+        b.setFocusable(false);
+        b.setBackground(new Color(15, 15, 20));
+        b.setPreferredSize(new Dimension(100, 30));
+        b.setBorderPainted(false);
+        b.setForeground(new Color(200, 200, 220));
+        b.setHorizontalAlignment(JLabel.CENTER);
+        b.setMargin(new Insets(0, 20, 0, 20));
+        b.addChangeListener(e -> b.setBackground((b.isSelected()) ? new Color(40, 40, 70) : new Color(15, 15, 20)));
+        b.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                if(!b.isSelected())b.setBackground(new Color(40, 40, 70));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                if(!b.isSelected())b.setBackground(new Color(15, 15, 20));
+            }
+        });
+        b.addActionListener(e -> selectedType = page);
         return b;
     }
 

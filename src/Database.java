@@ -36,7 +36,6 @@ public class Database {
 
             stmt.close();
         }catch(Exception e) {
-            //System.out.println("Something is wrong...");
             e.printStackTrace();
         }
     }
