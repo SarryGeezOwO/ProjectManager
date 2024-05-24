@@ -39,7 +39,7 @@ public class Controller {
             e.printStackTrace();
         }
 
-        // FrontEnd Controlss
+        // FrontEnd Controls
         this.cp = cp;
         cp.add(createSidebar(), BorderLayout.WEST);
         cp.add(mainPanel(), BorderLayout.CENTER);

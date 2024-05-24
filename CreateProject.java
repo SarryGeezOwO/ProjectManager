@@ -255,32 +255,30 @@ public class CreateProject extends FrameBP {
         browse.setBackground(new Color(40, 40, 50));
         browse.setFocusPainted(false);
         browse.setBorderPainted(false);
-        browse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        browse.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
-                d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                d.setAlwaysOnTop(true);
+            JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
+            d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            d.setAlwaysOnTop(true);
 
-                chooser.addActionListener(e1 -> {
-                    if(JFileChooser.APPROVE_SELECTION.equals(e1.getActionCommand())) {
-                        File f = chooser.getSelectedFile();
-                        pathField.setText(f.getAbsolutePath());
-                    }
-                    d.dispose();
-                });
+            chooser.addActionListener(e1 -> {
+                if(JFileChooser.APPROVE_SELECTION.equals(e1.getActionCommand())) {
+                    File f1 = chooser.getSelectedFile();
+                    pathField.setText(f1.getAbsolutePath());
+                }
+                d.dispose();
+            });
 
-                d.getContentPane().add(chooser, BorderLayout.CENTER);
-                d.setSize(600, 600);
-                d.setLocationRelativeTo(null);
-                d.setVisible(true);
-            }
+            d.getContentPane().add(chooser, BorderLayout.CENTER);
+            d.setSize(600, 600);
+            d.setLocationRelativeTo(null);
+            d.setVisible(true);
         });
 
         JCheckBox readMe = new JCheckBox();
+        readMe.setMargin(new Insets(0, -5, 0, 0));
         readMe.setOpaque(false);
         readMe.setIcon(FrameBP.scaledIcon(new ImageIcon("icons/unchecked.png"), 30, 30));
         readMe.setSelectedIcon(FrameBP.scaledIcon(new ImageIcon("icons/checked.png"), 30, 30));
@@ -320,7 +318,7 @@ public class CreateProject extends FrameBP {
         };
     }
 
-    private void createFolder(String name, String path, int type) {
+    private void createFolder(String path, int type) {
         if(type == 0) {
             // Empty
             File folder = new File(path);
@@ -349,29 +347,22 @@ public class CreateProject extends FrameBP {
         toolbar.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, new Color(40,40,50)));
 
         JButton confirm = createButton("Finish");
-        confirm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(!nameField.getText().isEmpty() && !pathField.getText().isEmpty()) {
-                        Launcher.database.insertData(nameField.getText(), pathField.getText() + "\\"+ nameField.getText());
-                        Launcher.controller.updateProjectPage();
-                        createFolder(nameField.getText(), pathField.getText() + "\\"+ nameField.getText(), pageSelected);
-                        dispose();
-                    }
-                } catch (SQLException e1) {
-                    System.out.println("Insert went wrong");
+        confirm.addActionListener(e -> {
+            try {
+                if(!nameField.getText().isEmpty() && !pathField.getText().isEmpty()) {
+                    Launcher.database.insertData(nameField.getText(), pathField.getText() + "\\"+ nameField.getText());
+                    Launcher.controller.updateProjectPage();
+                    createFolder(pathField.getText() + "\\"+ nameField.getText(), pageSelected);
+                    dispose();
                 }
+            } catch (SQLException e1) {
+                //System.out.println("Insert went wrong");
+                e1.printStackTrace();
             }
         });
 
         JButton cancel = createButton("Cancel");
-        cancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        cancel.addActionListener(e -> dispose());
 
         toolbar.add(confirm);
         toolbar.add(Box.createHorizontalStrut(20));

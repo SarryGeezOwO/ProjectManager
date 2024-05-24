@@ -15,7 +15,6 @@ public class Database {
     public static String ID_COL = "id";
     public static String NAME_COL = "name";
     public static String PATH_COL = "path";
-    int idCounter = 0;
 
     public Database() {
         storage = new ArrayList<>();
@@ -27,7 +26,7 @@ public class Database {
 
             String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + ID_COL + " INT PRIMARY KEY NOT NULL, " +
                             NAME_COL + " TEXT NOT NULL, " +
-                            PATH_COL + " TEXT NOT NULL)";
+                            PATH_COL + " TEXT NOT NULL);";
             stmt.executeUpdate(query);
             readAllData();
 
@@ -41,25 +40,34 @@ public class Database {
     }
 
     public void insertData(String name, String path) throws SQLException {
-        Statement s = conn.createStatement();
+        stmt = conn.createStatement();
         int n = getHighestID() + 1;
         String query = "INSERT INTO " + TABLE_NAME + "(" + ID_COL + ", " + NAME_COL + ", " + PATH_COL + ") " + 
-                        "VALUES (" + n + ", '" + name + "', '" + path + "')";
-        s.executeUpdate(query);
+                        "VALUES (" +n+ ", '" +escapeSingleQuotes(name)+ "', '" +escapeSingleQuotes(path)+ "');";
+        stmt.executeUpdate(query);
+        stmt.close();
         readAllData();
     }
 
+    public static String escapeSingleQuotes(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.replace("'", "''");
+    }
+
     public void removeData(int id) throws SQLException {
-        Statement s = conn.createStatement();
-        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = " + id;
-        s.executeUpdate(query);
+        stmt = conn.createStatement();
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = " + id +";";
+        stmt.executeUpdate(query);
+        stmt.close();
         readAllData();
     }
 
     private void readAllData() throws SQLException {
-        Statement s = conn.createStatement();
+        stmt = conn.createStatement();
         storage.clear();
-        ResultSet rs = s.executeQuery("SELECT * FROM " + TABLE_NAME);
+        ResultSet rs = stmt.executeQuery("SELECT * FROM " + TABLE_NAME);
         while(rs.next()) {
             int id = rs.getInt(ID_COL);
             String name = rs.getString(NAME_COL);
@@ -68,6 +76,7 @@ public class Database {
             Project p = new Project(id, name, path);
             storage.add(p);
         }
+        stmt.close();
     }
 
     private int getHighestID() {
