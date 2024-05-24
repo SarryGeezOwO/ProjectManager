@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -39,8 +41,8 @@ public class ProjectPage extends JPanel{
 
         // Recyclerview for projects
         // Search function
-        // New Project
-        // Open Project
+        // New src.Project
+        // Open src.Project
 
         // When you open a project it assigns that folder path to the database if it doesn't exist yet
         // Creating is simple, You create the folder and neccessary folder, after that you open that project
@@ -145,7 +147,7 @@ public class ProjectPage extends JPanel{
         recycler.removeAll();
         recycler.setLayout(new BoxLayout(recycler, BoxLayout.Y_AXIS));
         int counter = 0;
-        if(!Database.storage.isEmpty()) { // If Database is not empty
+        if(!Database.storage.isEmpty()) { // If src.Database is not empty
             recycler.add(Box.createVerticalStrut(10));
             for(Project p : Database.storage) {
                 int x = 0;

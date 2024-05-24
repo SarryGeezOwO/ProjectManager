@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -113,7 +115,7 @@ public class Project {
         delete.setMargin(new Insets(5, 10, 5, 10));
         delete.setFocusPainted(false);
         delete.setBorderPainted(false);
-        delete.setToolTipText("Delete Project");
+        delete.setToolTipText("Delete src.Project");
         delete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

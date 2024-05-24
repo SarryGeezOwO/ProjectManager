@@ -1,3 +1,5 @@
+package src;
+
 import SwingUIs.Vector2;
 
 import java.awt.BorderLayout;
@@ -335,7 +337,7 @@ public class CreateProject extends FrameBP {
             }
         }else {
             // Swing
-            System.out.println("Swing Project Created");
+            System.out.println("Swing src.Project Created");
         }
     }
 

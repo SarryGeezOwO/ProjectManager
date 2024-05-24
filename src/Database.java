@@ -1,3 +1,5 @@
+package src;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +24,7 @@ public class Database {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:PMStorage.db");
             stmt = conn.createStatement();
-            System.out.println("Database Open!");
+            System.out.println("src.Database Open!");
 
             String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" + ID_COL + " INT PRIMARY KEY NOT NULL, " +
                             NAME_COL + " TEXT NOT NULL, " +
