@@ -9,13 +9,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +23,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import SwingUIs.FrameBP;
 
@@ -162,15 +158,15 @@ public class CreateProject extends FrameBP {
         p.setOpaque(false);
 
         Font f = Controller.regular.deriveFont(16f);
-        JLabel nameLabel = new JLabel("Name :      ");
+        JLabel nameLabel = new JLabel("Name:       ");
         nameLabel.setForeground(new Color(200, 200, 220));
         nameLabel.setFont(f);
-        JLabel pathLabel = new JLabel("Location :  ");
+        JLabel pathLabel = new JLabel("Location:   ");
         pathLabel.setForeground(new Color(200, 200, 220));
         pathLabel.setFont(f);
 
-        nameField = createField(300);
-        pathField = createField(405);
+        nameField = createField(300, 30);
+        pathField = createField(405, 300);
         pathField.setEditable(false);
 
         JButton browse = new JButton();
@@ -215,7 +211,7 @@ public class CreateProject extends FrameBP {
         notice.setCaretColor(new Color(0, 0, 0, 1));
         notice.setOpaque(false);
 
-        JLabel typeLabel = new JLabel("Language :  ");
+        JLabel typeLabel = new JLabel("Language:   ");
         typeLabel.setForeground(new Color(200, 200, 220));
         typeLabel.setFont(f);
         JPanel typeChooser = createChoosePanel("JAVA", "HTML", "CS");
@@ -248,15 +244,15 @@ public class CreateProject extends FrameBP {
         p.setOpaque(false);
 
         Font f = Controller.regular.deriveFont(16f);
-        JLabel nameLabel = new JLabel("Name :      ");
+        JLabel nameLabel = new JLabel("Name:       ");
         nameLabel.setForeground(new Color(200, 200, 220));
         nameLabel.setFont(f);
-        JLabel pathLabel = new JLabel("Location :  ");
+        JLabel pathLabel = new JLabel("Location:   ");
         pathLabel.setForeground(new Color(200, 200, 220));
         pathLabel.setFont(f);
 
-        nameField = createField(300);
-        pathField = createField(405);
+        nameField = createField(300, 30);
+        pathField = createField(405, 300);
         pathField.setEditable(false);
 
         JButton browse = new JButton();
@@ -287,11 +283,29 @@ public class CreateProject extends FrameBP {
             d.setVisible(true);
         });
 
+        JLabel sizeX = new JLabel("Width:      ");
+        sizeX.setFont(f);
+        sizeX.setForeground(new Color(200, 200, 220));
+        JTextField frameX = createNumberField(50, 4);
+        frameX.setText("500");
+
+        JLabel sizeY = new JLabel("Height:     ");
+        sizeY.setFont(f);
+        sizeY.setForeground(new Color(200, 200, 220));
+        JTextField frameY = createNumberField(50, 4);
+        frameY.setText("500");
+
         JCheckBox readMe = createCheckBox();
         readMe.addActionListener(e -> readMeBool = readMe.isSelected());
         JLabel readMeLabel = new JLabel("Add a README");
         readMeLabel.setFont(Controller.semiBold.deriveFont(14f));
         readMeLabel.setForeground(new Color(200, 200, 220));
+
+        JCheckBox type = createCheckBox();
+        //type.addActionListener(e -> readMeBool = readMe.isSelected());
+        JLabel typeLabel = new JLabel("Undecorated frame");
+        typeLabel.setFont(Controller.semiBold.deriveFont(14f));
+        typeLabel.setForeground(new Color(200, 200, 220));
         
         Font f2 = Controller.regular.deriveFont(12f);
         JTextArea notice = new JTextArea("> The location text field is not editable. Use the browse button to assign a directory");
@@ -311,6 +325,15 @@ public class CreateProject extends FrameBP {
         p.add(pathLabel);
         p.add(pathField);
         p.add(browse);
+        p.add(sizeX);
+        p.add(frameX);
+        p.add(Box.createHorizontalStrut(350));
+        p.add(sizeY);
+        p.add(frameY);
+        p.add(Box.createHorizontalStrut(350));
+        p.add(type);
+        p.add(typeLabel);
+        p.add(Box.createHorizontalStrut(350));
         p.add(readMe);
         p.add(readMeLabel);
         p.add(notice);
@@ -318,12 +341,13 @@ public class CreateProject extends FrameBP {
     }
 
     private JCheckBox createCheckBox() {
-        JCheckBox readMe = new JCheckBox();
-        readMe.setMargin(new Insets(0, -5, 0, 0));
-        readMe.setOpaque(false);
-        readMe.setIcon(FrameBP.scaledIcon(new ImageIcon("icons/unchecked.png"), 30, 30));
-        readMe.setSelectedIcon(FrameBP.scaledIcon(new ImageIcon("icons/checked.png"), 30, 30));
-        return readMe;
+        JCheckBox cb = new JCheckBox();
+        cb.setMargin(new Insets(0, -5, 0, 0));
+        cb.setOpaque(false);
+        cb.setIcon(FrameBP.scaledIcon(new ImageIcon("icons/unchecked.png"), 30, 30));
+        cb.setSelectedIcon(FrameBP.scaledIcon(new ImageIcon("icons/checked.png"), 30, 30));
+        cb.setPreferredSize(new Dimension(30, 30));
+        return cb;
     }
 
     private JPanel getSelectedPage() {
@@ -472,7 +496,7 @@ public class CreateProject extends FrameBP {
         return b;
     }
 
-    private JTextField createField(int length) {
+    private JTextField createField(int length, int maxChar) {
         JTextField field = new JTextField();
         field.setCaretColor(new Color(200, 200, 220));
         field.setPreferredSize(new Dimension(length, 30));
@@ -481,6 +505,18 @@ public class CreateProject extends FrameBP {
         field.setBorder(new EmptyBorder(5,5,5,5));
         Font f = Controller.regular.deriveFont(16f);
         field.setFont(f);
+        field.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (field.getText().length() >= maxChar)
+                    e.consume();
+            }
+        });
         return field;
+    }
+
+    private JTextField createNumberField(int length, int maxDigits) {
+        JTextField f = createField(length, maxDigits);
+        return f;
     }
 }
