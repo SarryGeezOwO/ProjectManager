@@ -38,17 +38,6 @@ public class ProjectPage extends JPanel{
     public static JButton open;
 
     public ProjectPage() {
-
-        // Recyclerview for projects
-        // Search function
-        // New src.Project
-        // Open src.Project
-
-        // When you open a project it assigns that folder path to the database if it doesn't exist yet
-        // Creating is simple, You create the folder and neccessary folder, after that you open that project
-        // using the Open method, which will assign that folder path to the database :)
-        // "cd folder_path"   >   "code ."
-
         setOpaque(false);
         setLayout(new BorderLayout());
 
