@@ -23,8 +23,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import SwingUIs.FrameBP;
 
@@ -379,7 +377,7 @@ public class CreateProject extends FrameBP {
             }
         }else {
             // Swing
-            System.out.println("Swing src.Project Created");
+            // TODO : Copy the template files needed
         }
 
         if(readMeBool) {

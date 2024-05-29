@@ -1,4 +1,4 @@
-package SwingUIs;
+package materials.swingUndecorated.SwingUIs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +7,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 //import java.awt.geom.RoundRectangle2D;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FrameBP extends JFrame {
 
@@ -25,6 +27,9 @@ public class FrameBP extends JFrame {
     boolean isFullScreen = false;
     boolean resizable;
 
+    private InputStream stream;
+    public static Font redditMono;
+
     public static ImageIcon scaledIcon(ImageIcon icon, int width, int height) {
         Image root = icon.getImage();
         Image newImage = root.getScaledInstance(width, width, Image.SCALE_SMOOTH);
@@ -33,6 +38,15 @@ public class FrameBP extends JFrame {
     
     public FrameBP(String title, String display, Vector2 size, FrameState closeOperation, boolean resizable) {
         
+        stream = ClassLoader.getSystemClassLoader().getResourceAsStream("res/fonts/RedditMono-Regular.ttf");
+        try {
+            redditMono = Font.createFont(Font.TRUETYPE_FONT, stream);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.resizable = resizable;
         setSize(size.x, size.y);
         setTitle(title);
@@ -44,13 +58,13 @@ public class FrameBP extends JFrame {
         // Uncomment SetShape if you want rounded frame, but unable to resize
         //setShape(new RoundRectangle2D.Double(0, 0, size.x, size.y, 20, 20));
 
-        ImageIcon closeIcon = scaledIcon(new ImageIcon("icons/close.png"), 15, 15);
-        ImageIcon minIcon = scaledIcon(new ImageIcon("icons/minus.png"), 15, 15);
-        ImageIcon frameIcon = scaledIcon(new ImageIcon("icons/PM_Logo.png"), 30, 30);
-        ImageIcon layerIcon = scaledIcon(new ImageIcon("icons/layer.png"), 10, 10);
-        ImageIcon fullScreenIcon = scaledIcon(new ImageIcon("icons/max.png"), 10, 10);
+        ImageIcon closeIcon = scaledIcon(new ImageIcon("res/icons/close.png"), 15, 15);
+        ImageIcon minIcon = scaledIcon(new ImageIcon("res/icons/minus.png"), 15, 15);
+        ImageIcon frameIcon = scaledIcon(new ImageIcon("res/icons/java.png"), 15, 15);
+        ImageIcon layerIcon = scaledIcon(new ImageIcon("res/icons/layer.png"), 10, 10);
+        ImageIcon fullScreenIcon = scaledIcon(new ImageIcon("res/icons/max.png"), 10, 10);
 
-        ImageIcon tmp = new ImageIcon("icons/PM.png");
+        ImageIcon tmp = new ImageIcon("res/icons/java.png");
         Image logo = tmp.getImage();
         setIconImage(logo);
 
@@ -64,6 +78,7 @@ public class FrameBP extends JFrame {
                 super.mouseDragged(e);
                 int x = e.getXOnScreen();
                 int y = e.getYOnScreen();
+
                 if((x - xMouse > 0) || (y - yMouse > 0)) {
                     setLocation(
                         ((x - xMouse > 0) ? x - xMouse : 0), 
@@ -117,7 +132,7 @@ public class FrameBP extends JFrame {
         titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
         titleLabel.setForeground(new Color(215, 215, 215));
         int n = (resizable) ? 3 : 2;
-        titleLabel.setPreferredSize(new Dimension((getWidth()) - (35*n), 23));
+        titleLabel.setPreferredSize(new Dimension((getWidth() - 3) - (35*n), 23));
 
         header.add(titleLabel);
         header.add(minBtn);

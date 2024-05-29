@@ -40,6 +40,7 @@ public class ProjectPage extends JPanel{
     public ProjectPage() {
         setOpaque(false);
         setLayout(new BorderLayout());
+        setBorder(new EmptyBorder(0, 10, 0, 0));
 
         recycler.setLayout(new BoxLayout(recycler, BoxLayout.Y_AXIS));
         recycler.setOpaque(false);
@@ -141,7 +142,14 @@ public class ProjectPage extends JPanel{
             for(Project p : Database.storage) {
                 int x = 0;
                 if(scrollPane != null) x = (int)scrollPane.getViewport().getSize().getWidth() - 10;
-                recycler.add(p.show(x, 60, counter));
+
+                JPanel view = p.show(x, 60, counter);
+                File folder = new File(p.path);
+                if(!folder.exists()) {
+                    p.disableUI(view, x);
+                }
+
+                recycler.add(view);
                 recycler.add(Box.createVerticalStrut(10));
                 counter++;
             }

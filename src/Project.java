@@ -173,4 +173,79 @@ public class Project {
             e.printStackTrace();
         }
     }
+
+    public void disableUI(JPanel p, int width) {
+        p.remove(p.getComponentCount()-2);
+        p.remove(p.getComponentCount()-1);
+        p.removeMouseListener(p.getMouseListeners()[0]);
+        JPanel error = new JPanel();
+        error.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        error.setOpaque(false);
+
+        JLabel nameLabel = errorLabel(name, 18, width);
+        JLabel notice =  errorLabel("Project not found", 12, width);
+        notice.setForeground(new Color(180, 75, 50));
+
+        p.setBackground(new Color(60, 30, 45));
+        p.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                p.setBackground(new Color(80, 40, 60));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                p.setBackground(new Color(60, 30, 45));
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Nothing
+            }
+        });
+
+        JButton delete = new JButton();
+        ImageIcon icn = FrameBP.scaledIcon(new ImageIcon("icons/delete.png"), 25, 25);
+        delete.setIcon(icn);
+        delete.setPreferredSize(new Dimension(50, 60));
+        delete.setBackground(new Color(60, 25, 30));
+        delete.setMargin(new Insets(5, 10, 5, 10));
+        delete.setFocusPainted(false);
+        delete.setBorderPainted(false);
+        delete.setToolTipText("Delete src.Project");
+        delete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                delete.setBackground(new Color(70, 40, 45));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                delete.setBackground(new Color(60, 25, 30));
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Launcher.database.removeData(id);
+                    Launcher.controller.updateProjectPage();
+                    
+                } catch (SQLException e1) {
+                    System.out.println("Something went wrong again");
+                }
+            }
+        });
+
+        error.add(Box.createRigidArea(new Dimension(width - 50, 10)));
+        error.add(nameLabel);
+        error.add(notice);
+
+        p.add(error, BorderLayout.CENTER);
+        p.add(delete, BorderLayout.EAST);
+    }
+
+    private JLabel errorLabel(String str, int size, int width) {
+        JLabel l = new JLabel(str, JLabel.LEFT);
+        l.setFont(Controller.regular.deriveFont(Float.parseFloat(String.valueOf(size))));
+        l.setForeground(new Color(180, 180, 220));
+        l.setPreferredSize(new Dimension(width - 100, 20));
+
+        return l;
+    }
 }

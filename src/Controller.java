@@ -14,6 +14,7 @@ import SwingUIs.FrameBP;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -70,7 +71,6 @@ public class Controller {
             default:
                 break;
         }
-        p.setBorder(new EmptyBorder(0,10,0,0));
         cp.revalidate();
         cp.repaint();
         return p;
@@ -90,12 +90,12 @@ public class Controller {
         ButtonGroup group = new ButtonGroup();
         p.add(createLogo());
 
-        JRadioButton b1 = sidebarButtons("Projects", icn1, 0);
+        JRadioButton b1 = sidebarButtons("Projects", icn1, 0, KeyEvent.VK_P);
         b1.setSelected(true);
         
-        JRadioButton b2 = sidebarButtons("Github", icn2, 1);
-        JRadioButton b3 = sidebarButtons("Settings", icn3, 2);
-        JRadioButton b4 = sidebarButtons("About", icn4, 3);
+        JRadioButton b2 = sidebarButtons("Github", icn2, 1, KeyEvent.VK_G);
+        JRadioButton b3 = sidebarButtons("Settings", icn3, 2, KeyEvent.VK_S);
+        JRadioButton b4 = sidebarButtons("About", icn4, 3, KeyEvent.VK_A);
         p.add(b1);
         p.add(b2);
         p.add(b3);
@@ -109,9 +109,10 @@ public class Controller {
         return p;
     }
 
-    JRadioButton sidebarButtons(String txt, ImageIcon icn, int page) {
+    JRadioButton sidebarButtons(String txt, ImageIcon icn, int page, int mmonic) {
         JRadioButton b = new JRadioButton(txt);
         Font f = regular.deriveFont(14f);
+        b.setMnemonic(mmonic);
         b.setIcon(icn);
         b.setIconTextGap(10);
         b.setFont(f);
@@ -151,7 +152,7 @@ public class Controller {
         return b;
     }
 
-    JPanel createLogo() {
+    public static JPanel createLogo() {
         ImageIcon logo = FrameBP.scaledIcon(new ImageIcon("icons/PM_Logo.png"), 70, 70);
         JPanel p = new JPanel();
         p.setOpaque(false);
