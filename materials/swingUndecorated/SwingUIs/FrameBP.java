@@ -1,5 +1,3 @@
-package materials.swingUndecorated.SwingUIs;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -7,6 +5,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 //import java.awt.geom.RoundRectangle2D;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -27,7 +26,6 @@ public class FrameBP extends JFrame {
     boolean isFullScreen = false;
     boolean resizable;
 
-    private InputStream stream;
     public static Font redditMono;
 
     public static ImageIcon scaledIcon(ImageIcon icon, int width, int height) {
@@ -37,15 +35,11 @@ public class FrameBP extends JFrame {
     }
     
     public FrameBP(String title, String display, Vector2 size, FrameState closeOperation, boolean resizable) {
-        
-        stream = ClassLoader.getSystemClassLoader().getResourceAsStream("res/fonts/RedditMono-Regular.ttf");
-        try {
-            redditMono = Font.createFont(Font.TRUETYPE_FONT, stream);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        try{
+            File fontFile = new File("res/fonts/RedditMono-Regular.ttf");
+            redditMono = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+        }catch (Exception ignore) {}
 
         this.resizable = resizable;
         setSize(size.x, size.y);

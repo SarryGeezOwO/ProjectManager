@@ -13,10 +13,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.SQLException;
 
 import javax.swing.*;
@@ -36,6 +34,7 @@ public class CreateProject extends FrameBP {
     String[] projectTypes = {"java", "html", "csharp"};
     int selectedType = 0;
     boolean readMeBool = false;
+    boolean isUndecorated = false;
 
     public CreateProject() {
         super("New project", "< DevStack > New project", new Vector2(800, 600), FrameState.HIDE, false);
@@ -304,7 +303,7 @@ public class CreateProject extends FrameBP {
         readMeLabel.setForeground(new Color(200, 200, 220));
 
         JCheckBox type = createCheckBox();
-        //type.addActionListener(e -> readMeBool = readMe.isSelected());
+        type.addActionListener(e -> isUndecorated = type.isSelected());
         JLabel typeLabel = new JLabel("Undecorated frame");
         typeLabel.setFont(Controller.semiBold.deriveFont(14f));
         typeLabel.setForeground(new Color(200, 200, 220));
@@ -383,8 +382,13 @@ public class CreateProject extends FrameBP {
             }
         }else {
             // Swing
-            // TODO : Complete the code...
-            // ProjectPage.openProject_VScode(folder.getAbsolutePath());
+            File rootSource = new File("materials/swingUndecorated");
+            Path source = Paths.get(rootSource.getAbsolutePath());
+            Path targetDirectory = Paths.get(folder.getAbsolutePath());
+            try {
+                copyDirectory(source, targetDirectory);
+            } catch (IOException ignore) {}
+            ProjectPage.openProject_VScode(folder.getAbsolutePath());
         }
 
         if(readMeBool) {
@@ -521,6 +525,35 @@ public class CreateProject extends FrameBP {
 
     private JTextField createNumberField(int length, int maxDigits) {
         JTextField f = createField(length, maxDigits);
+        f.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (f.getText().length() >= maxDigits)
+                    e.consume();
+                if (Character.isLetter(e.getKeyChar())) {
+                    e.consume();
+                }
+            }
+        });
         return f;
+    }
+
+    public static void copyDirectory(Path source, Path target) throws IOException {
+        Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Path targetDir = target.resolve(source.relativize(dir));
+                if(!Files.exists(targetDir)) {
+                    Files.createDirectory(targetDir);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, target.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }
