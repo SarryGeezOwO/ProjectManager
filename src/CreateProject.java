@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -30,6 +31,9 @@ public class CreateProject extends FrameBP {
     int pageSelected;
     JTextField nameField;
     JTextField pathField;
+
+    JTextField frameX;
+    JTextField frameY;
 
     String[] projectTypes = {"java", "html", "csharp"};
     int selectedType = 0;
@@ -287,13 +291,13 @@ public class CreateProject extends FrameBP {
         JLabel sizeX = new JLabel("Width:      ");
         sizeX.setFont(f);
         sizeX.setForeground(new Color(200, 200, 220));
-        JTextField frameX = createNumberField(50, 4);
+        frameX = createNumberField(50, 4);
         frameX.setText("500");
 
         JLabel sizeY = new JLabel("Height:     ");
         sizeY.setFont(f);
         sizeY.setForeground(new Color(200, 200, 220));
-        JTextField frameY = createNumberField(50, 4);
+        frameY = createNumberField(50, 4);
         frameY.setText("500");
 
         JCheckBox readMe = createCheckBox();
@@ -388,6 +392,17 @@ public class CreateProject extends FrameBP {
             try {
                 copyDirectory(source, targetDirectory);
             } catch (IOException ignore) {}
+
+            File swingSettings = new File(folder.getAbsolutePath() + "/Settings.txt");
+            if(swingSettings.exists()) {
+                try {
+                    FileWriter writer = new FileWriter(swingSettings);
+                    writer.write("Width : " + frameX.getText() + "\n");
+                    writer.write("Width : " + frameY.getText() + "\n");
+                    writer.close();
+                }catch (Exception ignore) {}
+            }
+
             ProjectPage.openProject_VScode(folder.getAbsolutePath());
         }
 
