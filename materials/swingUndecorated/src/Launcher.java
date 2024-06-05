@@ -3,10 +3,6 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
-
-import SwingUIs.FrameBP;
-import SwingUIs.Vector2;
-
 public class Launcher extends FrameBP {
 
     public Launcher() {
@@ -14,7 +10,7 @@ public class Launcher extends FrameBP {
 
         JLabel label = new JLabel("Hello World!", JLabel.CENTER);
         label.setForeground(new Color(180, 180, 255));
-        label.setFont(redditMono.deriveFont(25f));
+        label.setFont(FrameBP.redditMono.deriveFont(25f));
 
         contentPanel.add(label, BorderLayout.CENTER);
         setVisible(true);

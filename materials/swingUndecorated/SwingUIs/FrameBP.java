@@ -6,9 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 //import java.awt.geom.RoundRectangle2D;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class FrameBP extends JFrame {
 
     public enum FrameState {
@@ -18,6 +15,7 @@ public class FrameBP extends JFrame {
     public JPanel header, contentPanel;
     public static Color primaryCol = new Color(15, 15, 20);
     public static Color accentCol = new Color(25, 25, 35);
+    public static Font redditMono;
 
     private JButton minBtn;
     private JLabel titleLabel;
@@ -25,8 +23,6 @@ public class FrameBP extends JFrame {
     int yMouse = 0;
     boolean isFullScreen = false;
     boolean resizable;
-
-    public static Font redditMono;
 
     public static ImageIcon scaledIcon(ImageIcon icon, int width, int height) {
         Image root = icon.getImage();
@@ -37,7 +33,7 @@ public class FrameBP extends JFrame {
     public FrameBP(String title, String display, Vector2 size, FrameState closeOperation, boolean resizable) {
 
         try{
-            File fontFile = new File("res/fonts/RedditMono-Regular.ttf");
+            File fontFile = new File("./res/fonts/RedditMono-Regular.ttf");
             redditMono = Font.createFont(Font.TRUETYPE_FONT, fontFile);
         }catch (Exception ignore) {}
 
