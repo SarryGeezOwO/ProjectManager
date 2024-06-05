@@ -8,7 +8,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -27,8 +30,22 @@ import SwingUIs.FrameBP;
 public class SettingsPage extends JPanel{
 
     public static File defaultPath;
+    public static File settingsData = new File("./SettingsData.txt");
+
+    public void getSettingsData() {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(settingsData));
+            String data = "";
+            while((data = reader.readLine()) != null) {
+                defaultPath = new File(data);
+            }
+            reader.close();
+        }catch (Exception ignored) {}
+    }
 
     public SettingsPage() {
+        getSettingsData();
+
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         setLayout(new BorderLayout());
@@ -73,7 +90,20 @@ public class SettingsPage extends JPanel{
                     pathField.setText(f1.getAbsolutePath());
                     SettingsPage.defaultPath = f1;
 
-                    // TODO : Replace the first line in the SettingsData.txt to the given path (mini database)
+                    try{
+                        if(settingsData.createNewFile()) {
+                            System.out.println("Settings Data not found, Creating a new file...");
+                        }else {
+                            System.out.println("Settings Data exists");
+                        }
+
+                        FileWriter writer = new FileWriter(settingsData);
+                        writer.write(f1.getAbsolutePath());
+                        writer.close();
+
+                    }catch (Exception e2) {
+                        System.out.println("Settings Data error...");
+                    }
                 }
                 d.dispose();
             });

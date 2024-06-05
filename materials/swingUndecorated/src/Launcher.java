@@ -9,6 +9,8 @@ import javax.swing.SwingUtilities;
 import SwingUIs.FrameBP;
 import SwingUIs.Vector2;
 
+import static materials.swingUndecorated.SwingUIs.FrameBP.redditMono;
+
 public class Launcher extends FrameBP {
 
     public Launcher() {
