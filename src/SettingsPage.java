@@ -32,12 +32,12 @@ public class SettingsPage extends JPanel{
     public static File defaultPath;
     public static File settingsData = new File("./SettingsData.txt");
 
-    public void getSettingsData() {
+    public static void getSettingsData() {
         try{
             BufferedReader reader = new BufferedReader(new FileReader(settingsData));
             String data = "";
             while((data = reader.readLine()) != null) {
-                defaultPath = new File(data);
+                SettingsPage.defaultPath = new File(data);
             }
             reader.close();
         }catch (Exception ignored) {}

@@ -13,7 +13,7 @@ public class Launcher extends FrameBP{
         database = new Database();
         controller = new Controller(contentPanel);
 
-        // Backend Controls
+        SettingsPage.getSettingsData();
         setVisible(true);
     }
     
