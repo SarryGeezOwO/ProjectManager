@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -64,29 +62,19 @@ public class ProjectPage extends JPanel{
         header.setPreferredSize(new Dimension(69, 100));
 
         create = createButton("New project");
-        create.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreateProject();
-            }
-        });
+        create.addActionListener(e -> new CreateProject());
         open = createButton("Open existing project");
-        open.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.showOpenDialog(null);
-                if(chooser.getSelectedFile() != null) {
-                    File path = chooser.getSelectedFile();
-                    try {
-                        Launcher.database.insertData(path.getName(), path.getAbsolutePath());
-                        openProject_VScode(path.getAbsolutePath());
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                    }
-                    Launcher.controller.updateProjectPage();
-                }
+        open.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.showOpenDialog(null);
+            if(chooser.getSelectedFile() != null) {
+                File path = chooser.getSelectedFile();
+                try {
+                    Launcher.database.insertData(path.getName(), path.getAbsolutePath());
+                    openProject_VScode(path.getAbsolutePath());
+                } catch (SQLException ignore) {}
+                Launcher.controller.updateProjectPage();
             }
         });
 
@@ -167,9 +155,7 @@ public class ProjectPage extends JPanel{
         p.command("cmd.exe", "/c", "code", folderPath);
         try {
             p.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) {}
     }
 
 

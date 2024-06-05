@@ -1,7 +1,7 @@
 package src;
 
-import javax.swing.SwingUtilities;
 import SwingUIs.*;
+import javax.swing.SwingUtilities;
 
 public class Launcher extends FrameBP{
 

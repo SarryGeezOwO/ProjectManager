@@ -1,11 +1,11 @@
 package SwingUIs;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 //import java.awt.geom.RoundRectangle2D;
 
 public class FrameBP extends JFrame {
@@ -18,8 +18,8 @@ public class FrameBP extends JFrame {
     public static Color primaryCol = new Color(15, 15, 20);
     public static Color accentCol = new Color(25, 25, 35);
 
-    private JButton minBtn;
-    private JLabel titleLabel;
+    private final JButton minBtn;
+    private final JLabel titleLabel;
     int xMouse = 0;
     int yMouse = 0;
     boolean isFullScreen = false;
@@ -27,7 +27,7 @@ public class FrameBP extends JFrame {
 
     public static ImageIcon scaledIcon(ImageIcon icon, int width, int height) {
         Image root = icon.getImage();
-        Image newImage = root.getScaledInstance(width, width, Image.SCALE_SMOOTH);
+        Image newImage = root.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(newImage);
     }
     
@@ -44,13 +44,13 @@ public class FrameBP extends JFrame {
         // Uncomment SetShape if you want rounded frame, but unable to resize
         //setShape(new RoundRectangle2D.Double(0, 0, size.x, size.y, 20, 20));
 
-        ImageIcon closeIcon = scaledIcon(new ImageIcon("icons/close.png"), 15, 15);
-        ImageIcon minIcon = scaledIcon(new ImageIcon("icons/minus.png"), 15, 15);
-        ImageIcon frameIcon = scaledIcon(new ImageIcon("icons/PM_Logo.png"), 30, 30);
-        ImageIcon layerIcon = scaledIcon(new ImageIcon("icons/layer.png"), 10, 10);
-        ImageIcon fullScreenIcon = scaledIcon(new ImageIcon("icons/max.png"), 10, 10);
+        ImageIcon closeIcon = scaledIcon(new ImageIcon("./icons/close.png"), 15, 15);
+        ImageIcon minIcon = scaledIcon(new ImageIcon("./icons/minus.png"), 15, 15);
+        ImageIcon frameIcon = scaledIcon(new ImageIcon("./icons/PM_Logo.png"), 30, 30);
+        ImageIcon layerIcon = scaledIcon(new ImageIcon("./icons/layer.png"), 10, 10);
+        ImageIcon fullScreenIcon = scaledIcon(new ImageIcon("./icons/max.png"), 10, 10);
 
-        ImageIcon tmp = new ImageIcon("icons/PM.png");
+        ImageIcon tmp = new ImageIcon("./icons/PM.png");
         Image logo = tmp.getImage();
         setIconImage(logo);
 
@@ -66,11 +66,11 @@ public class FrameBP extends JFrame {
                 int y = e.getYOnScreen();
                 if((x - xMouse > 0) || (y - yMouse > 0)) {
                     setLocation(
-                        ((x - xMouse > 0) ? x - xMouse : 0), 
-                        ((y - yMouse > 0) ? y - yMouse : 0)
+                        (Math.max(x - xMouse, 0)),
+                        (Math.max(y - yMouse, 0))
                     ); 
                 }
-            };
+            }
         });
         header.addMouseListener(new MouseAdapter() {
             @Override

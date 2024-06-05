@@ -114,13 +114,10 @@ public class CreateProject extends FrameBP {
                 if(!b.isSelected())b.setBackground(contentPanel.getBackground());
             }
         });
-        b.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Change Page
-                pageSelected = page;
-                updateUI();
-            }
+        b.addActionListener(e -> {
+            // Change Page
+            pageSelected = page;
+            updateUI();
         });
         return b;
     }
@@ -176,30 +173,27 @@ public class CreateProject extends FrameBP {
         browse.setBackground(new Color(40, 40, 50));
         browse.setFocusPainted(false);
         browse.setBorderPainted(false);
-        browse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                if(SettingsPage.defaultPath != null) chooser.setSelectedFile(SettingsPage.defaultPath);
+        browse.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if(SettingsPage.defaultPath != null) chooser.setSelectedFile(SettingsPage.defaultPath);
 
-                JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
-                d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                d.setAlwaysOnTop(true);
+            JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
+            d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            d.setAlwaysOnTop(true);
 
-                chooser.addActionListener(e1 -> {
-                    if(JFileChooser.APPROVE_SELECTION.equals(e1.getActionCommand())) {
-                        File f = chooser.getSelectedFile();
-                        pathField.setText(f.getAbsolutePath());
-                    }
-                    d.dispose();
-                });
+            chooser.addActionListener(e1 -> {
+                if(JFileChooser.APPROVE_SELECTION.equals(e1.getActionCommand())) {
+                    File f1 = chooser.getSelectedFile();
+                    pathField.setText(f1.getAbsolutePath());
+                }
+                d.dispose();
+            });
 
-                d.getContentPane().add(chooser, BorderLayout.CENTER);
-                d.setSize(600, 600);
-                d.setLocationRelativeTo(null);
-                d.setVisible(true);
-            }
+            d.getContentPane().add(chooser, BorderLayout.CENTER);
+            d.setSize(600, 600);
+            d.setLocationRelativeTo(null);
+            d.setVisible(true);
         });
 
         Font f2 = Controller.regular.deriveFont(12f);
@@ -436,8 +430,7 @@ public class CreateProject extends FrameBP {
                     dispose();
                 }
             } catch (SQLException e1) {
-                //System.out.println("Insert went wrong");
-                e1.printStackTrace();
+                System.out.println("Insert went wrong");
             }
         });
 
@@ -554,11 +547,11 @@ public class CreateProject extends FrameBP {
     }
 
     public static void copyDirectory(Path source, Path target) throws IOException {
-        Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+        Files.walkFileTree(source, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 Path targetDir = target.resolve(source.relativize(dir));
-                if(!Files.exists(targetDir)) {
+                if (!Files.exists(targetDir)) {
                     Files.createDirectory(targetDir);
                 }
                 return FileVisitResult.CONTINUE;

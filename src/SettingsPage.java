@@ -35,7 +35,7 @@ public class SettingsPage extends JPanel{
     public static void getSettingsData() {
         try{
             BufferedReader reader = new BufferedReader(new FileReader(settingsData));
-            String data = "";
+            String data;
             while((data = reader.readLine()) != null) {
                 SettingsPage.defaultPath = new File(data);
             }
@@ -114,7 +114,7 @@ public class SettingsPage extends JPanel{
             d.setVisible(true);
         });
 
-        JTextArea notice = new JTextArea("> The location text field is not editable. Use the browse button to assign a directory");
+        JTextArea notice = new JTextArea("**The location text field is not editable. Use the browse button to assign a directory");
         notice.setPreferredSize(new Dimension(600, 40));
         notice.setWrapStyleWord(true);
         notice.setLineWrap(true);
@@ -129,6 +129,7 @@ public class SettingsPage extends JPanel{
         content.add(pathField);
         content.add(Box.createHorizontalStrut(10));
         content.add(browse);
+        content.add(Box.createHorizontalStrut(3000));
         content.add(notice);
 
         add(header, BorderLayout.NORTH);
