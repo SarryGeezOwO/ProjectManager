@@ -30,8 +30,9 @@ public class AboutPage extends JPanel{
         version.setBorder(new EmptyBorder(14, 5, 0, 0));
 
         JTextArea desc = new JTextArea(
-            "DevStack_ is an application developed by Someone, development started since may, 2024" +
-            " It's created solely for the usage of the creator, and as a project meant for a better portfolio."
+            "DevStack_ is an application developed by SarryGeez, development started since may, 2024" +
+            " It's created solely for the usage of the creator, and as a project meant for a better portfolio." +
+            "\n\nThis application is for solely learning purposes and not intentionally created to support the needs of the public." 
         );
         desc.setEditable(false);
         desc.setWrapStyleWord(true);
@@ -39,7 +40,7 @@ public class AboutPage extends JPanel{
         desc.setForeground(new Color(180, 180, 220));
         desc.setBackground(new Color(40, 40, 50));
         desc.setBorder(new EmptyBorder(10, 10, 10, 10));
-        desc.setFont(Controller.regular.deriveFont(14f));
+        desc.setFont(Controller.regular.deriveFont(16f));
         desc.setSelectionColor(new Color(160, 160, 255));
 
 
@@ -50,6 +51,6 @@ public class AboutPage extends JPanel{
         p1.add(logo);
         p1.add(version);
         add(p1, BorderLayout.NORTH);
-        add(desc, BorderLayout.SOUTH);
+        add(desc, BorderLayout.CENTER);
     }
 }

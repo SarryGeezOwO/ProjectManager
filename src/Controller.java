@@ -59,13 +59,10 @@ public class Controller {
             case 0:
                 p = new ProjectPage();
                 break;
-            case 1: 
-                p = new GithubPage();
-                break;
-            case 2:
+            case 1:
                 p = new SettingsPage();
                 break;
-            case 3:
+            case 2:
                 p = new AboutPage();
                 break;
             default:
@@ -83,7 +80,6 @@ public class Controller {
         p.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         ImageIcon icn1 = FrameBP.scaledIcon(new ImageIcon("icons/folder.png"), 20, 20);
-        ImageIcon icn2 = FrameBP.scaledIcon(new ImageIcon("icons/github.png"), 20, 20);
         ImageIcon icn3 = FrameBP.scaledIcon(new ImageIcon("icons/settings.png"), 20, 20);
         ImageIcon icn4 = FrameBP.scaledIcon(new ImageIcon("icons/about.png"), 20, 20);
 
@@ -93,16 +89,13 @@ public class Controller {
         JRadioButton b1 = sidebarButtons("Projects", icn1, 0, KeyEvent.VK_P);
         b1.setSelected(true);
         
-        JRadioButton b2 = sidebarButtons("Github", icn2, 1, KeyEvent.VK_G);
-        JRadioButton b3 = sidebarButtons("Settings", icn3, 2, KeyEvent.VK_S);
-        JRadioButton b4 = sidebarButtons("About", icn4, 3, KeyEvent.VK_A);
+        JRadioButton b3 = sidebarButtons("Settings", icn3, 1, KeyEvent.VK_S);
+        JRadioButton b4 = sidebarButtons("About", icn4, 2, KeyEvent.VK_A);
         p.add(b1);
-        p.add(b2);
         p.add(b3);
         p.add(b4);
         // ============ //
         group.add(b1);
-        group.add(b2);
         group.add(b3);
         group.add(b4);
 

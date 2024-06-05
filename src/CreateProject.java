@@ -178,6 +178,7 @@ public class CreateProject extends FrameBP {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                if(SettingsPage.defaultPath != null) chooser.setSelectedFile(SettingsPage.defaultPath);
 
                 JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
                 d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -233,6 +234,8 @@ public class CreateProject extends FrameBP {
         p.add(readMe);
         p.add(readMeLabel);
         p.add(notice);
+
+        if(SettingsPage.defaultPath != null) pathField.setText(SettingsPage.defaultPath.getAbsolutePath());
         return p;
     }
 
@@ -262,6 +265,7 @@ public class CreateProject extends FrameBP {
         browse.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if(SettingsPage.defaultPath != null) chooser.setSelectedFile(SettingsPage.defaultPath);
 
             JDialog d = new JDialog(null, "Select project", Dialog.ModalityType.APPLICATION_MODAL);
             d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -335,6 +339,8 @@ public class CreateProject extends FrameBP {
         p.add(readMe);
         p.add(readMeLabel);
         p.add(notice);
+
+        if(SettingsPage.defaultPath != null) pathField.setText(SettingsPage.defaultPath.getAbsolutePath());
         return p;
     }
 
@@ -369,15 +375,16 @@ public class CreateProject extends FrameBP {
                     try {
                         Path target = targetDirectory.resolve(source.getFileName());
                         Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-                        ProjectPage.openProject_VScode(folder.getAbsolutePath());
                     } catch (IOException e) {
                         System.out.println("Failed to create folder");
                     }
                 }
+                ProjectPage.openProject_VScode(folder.getAbsolutePath());
             }
         }else {
             // Swing
-            // TODO : Copy the template files needed
+            // TODO : Complete the code...
+            // ProjectPage.openProject_VScode(folder.getAbsolutePath());
         }
 
         if(readMeBool) {
@@ -387,7 +394,6 @@ public class CreateProject extends FrameBP {
             try {
                 Path target = targetDirectory.resolve(src.getFileName());
                 Files.copy(src, target, StandardCopyOption.REPLACE_EXISTING);
-                ProjectPage.openProject_VScode(folder.getAbsolutePath());
             } catch (IOException e) {
                 System.out.println("Failed to create folder");
             }
