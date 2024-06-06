@@ -30,6 +30,8 @@ Feel free to modify these for your own usage.
 ### src
 > Includes all the files for application.
 ### SwingUIs 
-> A java package for easier UI building.
-> Credits to Rob Camick for the ComponentResizer
-> [Component Resizer](https://tips4java.wordpress.com/2009/09/13/resizing-components/)
+> A java package for easier UI building.<br>
+> Thanks to Rob Camick for the 
+> [Component Resizer](https://tips4java.wordpress.com/2009/09/13/resizing-components/).
+### Settings.txt
+> 
