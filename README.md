@@ -34,4 +34,4 @@ Feel free to modify these for your own usage.
 > Thanks to Rob Camick for the 
 > [Component Resizer](https://tips4java.wordpress.com/2009/09/13/resizing-components/).
 ### Settings.txt
-> 
+> A text file for the application to read and write data, for settings config.
