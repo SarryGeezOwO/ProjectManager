@@ -127,7 +127,7 @@ public class Project {
             }
             @Override
             public void mouseClicked(MouseEvent e) {
-                new ConfirmationDialog("Are you sure you want to delete " + name + "?", new Vector2(300, 150),
+                new ConfirmationDialog("delete " + name + "?", new Vector2(400, 150),
                 new ConfirmationAction() {
                     @Override
                     public void callAction() {

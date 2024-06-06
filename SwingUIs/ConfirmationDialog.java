@@ -1,17 +1,14 @@
 package SwingUIs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.File;
+import java.io.IOException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class ConfirmationDialog extends FrameBP {
@@ -25,6 +22,14 @@ public class ConfirmationDialog extends FrameBP {
         alert.setIconTextGap(10);
         alert.setHorizontalTextPosition(JLabel.RIGHT);
         alert.setHorizontalAlignment(JLabel.CENTER);
+
+        File fontFile = new File("./fonts/RedditMono-Regular.ttf");
+        if(fontFile.exists()) {
+            try {
+                Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                alert.setFont(font.deriveFont(14f));
+            } catch (FontFormatException | IOException ignored) {}
+        }
 
         requestFocus();
         setAlwaysOnTop(true);
@@ -44,6 +49,7 @@ public class ConfirmationDialog extends FrameBP {
         JPanel p = new JPanel();
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(5, 5, 5, 5));
+        p.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
         JButton confirm = button("Yes");
         JButton cancel = button("No");
@@ -64,6 +70,7 @@ public class ConfirmationDialog extends FrameBP {
         p.add(confirm);
         p.add(cancel);
 
+        contentPanel.add(Box.createRigidArea(new Dimension(size.x, 30)));
         contentPanel.add(alert, BorderLayout.CENTER);
         contentPanel.add(p, BorderLayout.SOUTH);
         setVisible(true);

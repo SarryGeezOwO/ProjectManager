@@ -380,7 +380,8 @@ public class CreateProject extends FrameBP {
             }
         }else {
             // Swing
-            File rootSource = new File("materials/swingUndecorated");
+            String swingType = (isUndecorated) ? "swingUndecorated" : "swing";
+            File rootSource = new File("materials/" + swingType);
             Path source = Paths.get(rootSource.getAbsolutePath());
             Path targetDirectory = Paths.get(folder.getAbsolutePath());
             try {
